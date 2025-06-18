@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tags = tagsInput.value.split(",").map(t => t.trim()).filter(Boolean);
     const note = noteInput.value.trim();
     const folder = folderInput.value.trim();
-    const editingIdx = saveBtn.getAttribute('data-editing');
+    const editingUrl = saveBtn.getAttribute('data-editing-url');
+    const editingTime = saveBtn.getAttribute('data-editing-time');
 
     chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
       const bookmark = {
@@ -49,14 +50,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Duplicate detection
       chrome.storage.sync.get({ bookmarks: [] }, (data) => {
         const exists = data.bookmarks.some(bm => bm.url === bookmark.url);
-        if (exists && (editingIdx === null || editingIdx === undefined)) {
+        if (exists && (editingUrl === null || editingUrl === undefined)) {
           alert('This bookmark already exists!');
           return;
         }
         let updated;
-        if (editingIdx !== null && editingIdx !== undefined) {
-          updated = data.bookmarks.map((b, i) => i == editingIdx ? { ...b, tags, note, folder } : b);
-          saveBtn.removeAttribute('data-editing');
+        if (editingUrl && editingTime) {
+          updated = data.bookmarks.map((bm) =>
+            bm.url === editingUrl && bm.time === editingTime ? { ...bm, tags, note, folder } : bm
+          );
+          saveBtn.removeAttribute('data-editing-url');
+          saveBtn.removeAttribute('data-editing-time');
         } else {
           updated = [...data.bookmarks, bookmark];
         }
@@ -159,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Store sort value globally
-  let currentSort = 'pinned';
+  let currentSort = 'date';
 
   // Sorting UI
   function renderSortOptions() {
@@ -200,32 +204,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!folderBar) {
       folderBar = document.createElement('div');
       folderBar.id = 'folderBar';
-      folderBar.style.display = 'flex';
-      folderBar.style.flexWrap = 'wrap';
-      folderBar.style.gap = '8px';
-      folderBar.style.margin = '8px 0 0 0';
+      folderBar.className = 'folder-grid';
       searchInput.parentNode.insertBefore(folderBar, searchInput.nextSibling);
     }
     folderBar.innerHTML = '';
     Array.from(folderSet).sort().forEach(folder => {
-      const btn = document.createElement('button');
-      btn.textContent = folder;
-      btn.className = 'folder-filter-btn';
-      btn.onclick = () => {
+      const folderDiv = document.createElement('div');
+      folderDiv.className = 'folder-grid-item';
+      folderDiv.title = folder;
+      folderDiv.tabIndex = 0;
+      folderDiv.onclick = () => {
         renderBookmarks(bookmarks.filter(b => b.folder === folder));
       };
-      folderBar.appendChild(btn);
+      folderDiv.innerHTML = `
+        <img src="icons/folder-48.png" alt="${folder}" class="folder-icon" />
+        <div class="folder-name">${folder}</div>
+      `;
+      folderBar.appendChild(folderDiv);
     });
     if (folderSet.size > 0) {
-      const showAllBtn = document.createElement('button');
-      showAllBtn.textContent = 'Show All';
-      showAllBtn.className = 'folder-filter-btn';
-      showAllBtn.onclick = () => {
+      const showAllDiv = document.createElement('div');
+      showAllDiv.className = 'folder-grid-item';
+      showAllDiv.title = 'Show All';
+      showAllDiv.tabIndex = 0;
+      showAllDiv.onclick = () => {
         chrome.storage.sync.get({ bookmarks: [] }, (data) => {
           renderBookmarks(data.bookmarks);
         });
       };
-      folderBar.appendChild(showAllBtn);
+      showAllDiv.innerHTML = `
+        <img src="icons/folder-48.png" alt="Show All" class="folder-icon" style="opacity:0.5;" />
+        <div class="folder-name">Show All</div>
+      `;
+      folderBar.appendChild(showAllDiv);
     }
   }
 
@@ -237,7 +248,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     bookmarkList.innerHTML = "";
     let sort = currentSort;
     let sorted = [...bookmarks];
-    if (sort === 'pinned') sorted.sort((a, b) => (b.pinned === true) - (a.pinned === true));
+    if (sort === 'pinned') {
+      sorted = sorted.filter(b => b.pinned === true);
+      if (sorted.length === 0) {
+        // If no pinned bookmarks left, switch to 'date' filter
+        currentSort = 'date';
+        renderSortOptions();
+        sorted = [...bookmarks];
+        sorted.sort((a, b) => new Date(b.time) - new Date(a.time));
+      }
+    }
     if (sort === 'date') sorted.sort((a, b) => new Date(b.time) - new Date(a.time)); // Newest first
     if (sort === 'title') sorted.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
     sorted.forEach((b, idx) => {
@@ -269,7 +289,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       li.querySelector(".delete-btn").addEventListener("click", (e) => {
         e.stopPropagation();
         chrome.storage.sync.get({ bookmarks: [] }, (data) => {
-          const updated = data.bookmarks.filter((_, i) => i !== idx);
+          const updated = data.bookmarks.filter((bm) => !(bm.url === b.url && bm.time === b.time));
           chrome.storage.sync.set({ bookmarks: updated }, () => {
             renderBookmarks(updated);
           });
@@ -280,13 +300,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         tagsInput.value = b.tags.join(", ");
         noteInput.value = b.note;
         folderInput.value = b.folder;
-        saveBtn.setAttribute('data-editing', idx);
+        // Store a unique identifier for editing
+        saveBtn.setAttribute('data-editing-url', b.url);
+        saveBtn.setAttribute('data-editing-time', b.time);
       });
       li.querySelector(".pin-btn").addEventListener("click", (e) => {
         e.stopPropagation();
         chrome.storage.sync.get({ bookmarks: [] }, (data) => {
-          const updated = data.bookmarks.map((bm, i) => i === idx ? { ...bm, pinned: !bm.pinned } : bm);
+          // Find the correct bookmark by url and time
+          const updated = data.bookmarks.map((bm) =>
+            bm.url === b.url && bm.time === b.time ? { ...bm, pinned: !bm.pinned } : bm
+          );
           chrome.storage.sync.set({ bookmarks: updated }, () => {
+            if (currentSort === 'pinned' && !updated.some(bm => bm.pinned)) {
+              currentSort = 'date';
+              renderSortOptions();
+              setTimeout(() => {
+                chrome.storage.sync.get({ bookmarks: [] }, (fresh) => {
+                  renderBookmarks(fresh.bookmarks);
+                });
+              }, 0);
+              return;
+            }
             renderBookmarks(updated);
           });
         });

@@ -365,3 +365,39 @@ input:focus, textarea:focus {
 #folderBar {
   margin-bottom: 4px;
 }
+
+.folder-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 12px;
+  margin: 8px 0 12px 0;
+  justify-content: flex-start;
+}
+.folder-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 64px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 8px 0 4px 0;
+  transition: background 0.18s, box-shadow 0.18s;
+  outline: none;
+}
+.folder-grid-item:focus, .folder-grid-item:hover {
+  background: #232a36;
+  box-shadow: 0 2px 8px #4f8cff22;
+}
+.folder-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 2px 4px #0002);
+}
+.folder-name {
+  color: #ffb347;
+  font-size: 13px;
+  text-align: center;
+  word-break: break-all;
+  margin-top: 2px;
+}
