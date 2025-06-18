@@ -51,6 +51,29 @@ An intelligent, modern Chrome extension for bookmarking with folders, tags, note
 
 ---
 
+## 🏆 Why SmartMark? (Comparison with Other Bookmark Extensions)
+
+| Feature / Extension         | SmartMark | Raindrop.io | Google Bookmark Manager | SuperSorter | Dewey Bookmarks |
+|----------------------------|:---------:|:-----------:|:----------------------:|:-----------:|:---------------:|
+| **Open Source**            |     ✅     |      ❌      |          ❌             |      ❌      |       ❌        |
+| **Folders**                |     ✅     |      ✅      |          ✅             |      ❌      |       ❌        |
+| **Tags**                   |     ✅     |      ✅      |          ❌             |      ❌      |       ✅        |
+| **Color Labels**           |     ✅     |      ✅      |          ❌             |      ❌      |       ❌        |
+| **Notes**                  |     ✅     |      ✅      |          ❌             |      ❌      |       ✅        |
+| **Pin/Favorite**           |     ✅     |      ✅      |          ❌             |      ❌      |       ❌        |
+| **Search**                 |     ✅     |      ✅      |          ✅             |      ✅      |       ✅        |
+| **Sort**                   |     ✅     |      ✅      |          ❌             |      ✅      |       ✅        |
+| **Export/Import**          |     ✅     |      ✅      |          ❌             |      ❌      |       ✅        |
+| **Duplicate Detection**    |     ✅     |      ❌      |          ❌             |      ✅      |       ❌        |
+| **Modern Dark UI**         |     ✅     |      ✅      |          ❌             |      ❌      |       ❌        |
+| **Quick Copy Link**        |     ✅     |      ❌      |          ❌             |      ❌      |       ❌        |
+| **Favicon & Date/Time**    |     ✅     |      ✅      |          ✅             |      ❌      |       ❌        |
+| **Privacy (local only)**   |     ✅     |      ❌      |          ❌             |      ✅      |       ✅        |
+
+> **SmartMark** stands out as a fully open-source, privacy-friendly, modern bookmark manager with advanced organization (folders, tags, color labels), notes, duplicate detection, and a beautiful UI—all running locally in your browser.
+
+---
+
 ## ⭐ Star & Contribute
 
 If you like this project, please **star** ⭐ the repo!
