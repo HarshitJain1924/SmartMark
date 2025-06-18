@@ -1,4 +1,4 @@
-# SmartMark ⭐
+# <img src="icons/bookmark-48.png" alt="SmartMark Logo" width="36" style="vertical-align:middle; margin-right:8px;"> SmartMark ⭐
 [![GitHub stars](https://img.shields.io/github/stars/harshitjain1924/SmartMark?style=social)](https://github.com/harshitjain1924/SmartMark/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Issues](https://img.shields.io/github/issues/harshitjain1924/SmartMark)](../../issues)
