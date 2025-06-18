@@ -11,8 +11,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Get active tab
   chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     currentTab = tab;
-    pageTitleEl.textContent = tab.title;
+    // If a ?title= param is present, show it as the page title, else use tab.title or url
+    const params = new URLSearchParams(window.location.search);
+    const urlParam = params.get('url');
+    const titleParam = params.get('title');
+    if (titleParam) {
+      pageTitleEl.textContent = titleParam;
+    } else if (urlParam) {
+      pageTitleEl.textContent = urlParam;
+    } else {
+      pageTitleEl.textContent = tab.title;
+    }
   });
+
+  // If a ?url= param is present, prefill the form and show the title if available
+  const params = new URLSearchParams(window.location.search);
+  const urlParam = params.get('url');
+  const titleParam = params.get('title');
+  const faviconParam = params.get('favicon');
+  if (urlParam) {
+    pageTitleEl.textContent = titleParam || urlParam;
+    // Optionally, you could fetch the page title via background script if needed
+    // Prefill the URL for saving
+    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+      currentTab = { ...tab, url: urlParam };
+    });
+  }
 
   // --- Folder Structure ---
   // Each bookmark can have a 'folder' property (string)
@@ -35,41 +59,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     const folder = folderInput.value.trim();
     const editingUrl = saveBtn.getAttribute('data-editing-url');
     const editingTime = saveBtn.getAttribute('data-editing-time');
+    const params = new URLSearchParams(window.location.search);
+    const urlParam = params.get('url');
 
-    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-      const bookmark = {
-        url: tab.url,
-        title: tab.title,
-        tags,
-        note,
-        folder,
-        time: new Date().toISOString(),
-        pinned: false,
-        favicon: tab.favIconUrl || ''
-      };
-      // Duplicate detection
-      chrome.storage.sync.get({ bookmarks: [] }, (data) => {
-        const exists = data.bookmarks.some(bm => bm.url === bookmark.url);
-        if (exists && (editingUrl === null || editingUrl === undefined)) {
-          alert('This bookmark already exists!');
-          return;
-        }
-        let updated;
-        if (editingUrl && editingTime) {
-          updated = data.bookmarks.map((bm) =>
-            bm.url === editingUrl && bm.time === editingTime ? { ...bm, tags, note, folder } : bm
-          );
-          saveBtn.removeAttribute('data-editing-url');
-          saveBtn.removeAttribute('data-editing-time');
-        } else {
-          updated = [...data.bookmarks, bookmark];
-        }
-        chrome.storage.sync.set({ bookmarks: updated }, () => {
-          renderBookmarks(updated);
-          tagsInput.value = "";
-          noteInput.value = "";
-          folderInput.value = "";
-        });
+    let bookmarkUrl = urlParam || (currentTab && currentTab.url);
+    let bookmarkTitle = (titleParam || (urlParam ? urlParam : (currentTab && currentTab.title))) || '';
+    let bookmarkFavicon = (faviconParam || (urlParam ? '' : (currentTab && currentTab.favIconUrl))) || '';
+
+    chrome.storage.sync.get({ bookmarks: [] }, (data) => {
+      // Use bookmarkUrl for duplicate detection
+      const exists = data.bookmarks.some(bm => bm.url === bookmarkUrl);
+      if (exists && !(editingUrl && editingTime)) {
+        alert('This bookmark already exists!');
+        return;
+      }
+      let updated;
+      if (editingUrl && editingTime) {
+        updated = data.bookmarks.map((bm) =>
+          bm.url === editingUrl && bm.time === editingTime ? { ...bm, tags, note, folder } : bm
+        );
+        saveBtn.removeAttribute('data-editing-url');
+        saveBtn.removeAttribute('data-editing-time');
+      } else {
+        const bookmark = {
+          url: bookmarkUrl,
+          title: bookmarkTitle,
+          tags,
+          note,
+          folder,
+          time: new Date().toISOString(),
+          pinned: false,
+          favicon: bookmarkFavicon
+        };
+        updated = [...data.bookmarks, bookmark];
+      }
+      chrome.storage.sync.set({ bookmarks: updated }, () => {
+        renderBookmarks(updated);
+        tagsInput.value = "";
+        noteInput.value = "";
+        folderInput.value = "";
       });
     });
   });

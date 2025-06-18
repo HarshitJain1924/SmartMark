@@ -43,7 +43,9 @@ An intelligent, modern Chrome extension for bookmarking with folders, tags, note
 
 ## 🛠️ Usage
 
-- Click the extension icon to open SmartMark
+- Click the extension icon to open SmartMark and save the current page (title, URL, favicon auto-filled)
+- **Or:** Right-click any page or link and choose **Add to SmartMark** from the context menu
+  - The popup will open with the real page title, URL, and favicon pre-filled (if available)
 - Fill in tags, notes, and (optionally) a folder name
 - Click **Save Bookmark**
 - Use the search, sort, and folder/tag filters to find your bookmarks
