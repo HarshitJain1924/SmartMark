@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SmartMark</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>SmartMark</h2>
+  <div id="form-section">
+    <p><strong>Page:</strong> <span id="pageTitle">Loading...</span></p>
+    <input type="text" id="tags" placeholder="Add tags (comma separated)" />
+    <textarea id="note" placeholder="Add a short note..."></textarea>
+    <button id="saveBtn">Save Bookmark</button>
+  </div>
+
+  <h3>Saved</h3>
+  <input type="text" id="search" placeholder="Search..." />
+  <div style="display:flex; gap:8px; margin:8px 0;">
+    <button id="exportBtn" style="flex:1;">Export</button>
+    <label for="importInput" style="flex:1; background:#232a36; color:#e3e6eb; border-radius:6px; padding:6px 0; text-align:center; cursor:pointer;">Import
+      <input type="file" id="importInput" accept="application/json" style="display:none;" />
+    </label>
+  </div>
+  <ul id="bookmarkList"></ul>
+
+  <script src="popup.js"></script>
+</body>
+</html>
