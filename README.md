@@ -1,4 +1,7 @@
 # SmartMark ⭐
+[![GitHub stars](https://img.shields.io/github/stars/harshitjain1924/SmartMark?style=social)](https://github.com/harshitjain1924/SmartMark/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/harshitjain1924/SmartMark)](../../issues)
 
 An intelligent, modern Chrome extension for bookmarking with folders, tags, notes, color labels, and more.
 

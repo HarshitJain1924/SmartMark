@@ -49,7 +49,7 @@ Please be respectful and inclusive. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
 ## Reporting Issues
 
-- Use [GitHub Issues](https://github.com/harshitjain1924/SmartMark/issues) for bugs and feature requests.
+- Use [GitHub Issues](../../issues) for bugs and feature requests.
 - Provide as much detail as possible (screenshots, steps to reproduce, etc).
 
 ---
