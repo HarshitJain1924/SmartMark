@@ -12,7 +12,7 @@ We welcome bug reports, feature requests, and pull requests. Please follow these
 - Click the **Fork** button at the top right of this repo.
 - Clone your fork:
   ```sh
-  git clone https://github.com/YOUR-USERNAME/SmartMark.git
+  git clone https://github.com/harshitjain1924/SmartMark.git
   cd SmartMark
   ```
 
