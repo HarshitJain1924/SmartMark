@@ -10,6 +10,7 @@ An intelligent, modern Chrome extension for bookmarking with folders, tags, note
 ## ✨ Features
 
 - **Save bookmarks** with title, URL, tags, notes, and custom folder
+- **Context menu integration** for bookmarking any page or link with right-click
 - **Organize** bookmarks by folders and tags
 - **Color label** bookmarks for quick visual grouping
 - **Pin/favorite** important bookmarks
@@ -59,6 +60,7 @@ An intelligent, modern Chrome extension for bookmarking with folders, tags, note
 |----------------------------|:---------:|:-----------:|:----------------------:|:-----------:|:---------------:|
 | **Open Source**            |     ✅     |      ❌      |          ❌             |      ❌      |       ❌        |
 | **Folders**                |     ✅     |      ✅      |          ✅             |      ❌      |       ❌        |
+| **Visual Folder Grid**     |     ✅     |      ❌      |          ❌             |      ❌      |       ❌        |
 | **Tags**                   |     ✅     |      ✅      |          ❌             |      ❌      |       ✅        |
 | **Color Labels**           |     ✅     |      ✅      |          ❌             |      ❌      |       ❌        |
 | **Notes**                  |     ✅     |      ✅      |          ❌             |      ❌      |       ✅        |
@@ -69,6 +71,7 @@ An intelligent, modern Chrome extension for bookmarking with folders, tags, note
 | **Duplicate Detection**    |     ✅     |      ❌      |          ❌             |      ✅      |       ❌        |
 | **Modern Dark UI**         |     ✅     |      ✅      |          ❌             |      ❌      |       ❌        |
 | **Quick Copy Link**        |     ✅     |      ❌      |          ❌             |      ❌      |       ❌        |
+| **Context Menu**           |     ✅     |      ✅      |          ❌             |      ❌      |       ❌        |
 | **Favicon & Date/Time**    |     ✅     |      ✅      |          ✅             |      ❌      |       ❌        |
 | **Privacy (local only)**   |     ✅     |      ❌      |          ❌             |      ✅      |       ✅        |
 
@@ -93,3 +96,19 @@ MIT License. See [LICENSE](LICENSE) for details.
 ## 🙏 Credits
 
 Made with ❤️ by [Harshit Jain](https://github.com/harshitjain1924) and contributors.
+
+---
+
+## 🔮 Roadmap
+
+Features planned for future releases:
+
+- **Keyboard Shortcuts** - Save bookmarks with Alt+S and navigate within the extension
+- **Advanced Search** - Filter by multiple tags, date ranges, and full-text search
+- **UI Enhancements** - List/grid view toggle and bookmark previews/thumbnails  
+- **Browser Support** - Firefox and Edge compatibility
+- **Cloud Sync** - Optional sync with Google Drive or Dropbox
+- **Analytics** - View your most-used bookmarks and browsing patterns
+- **Omnibox Integration** - Search your bookmarks from Chrome's address bar
+
+Have a feature suggestion? [Open an issue](../../issues/new) with the "enhancement" label!
